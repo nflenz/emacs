@@ -1,0 +1,27 @@
+* TODO Agenda files
+- Note taken on [2022-10-24 Mon 21:53] \\
+  Add some more files/directories for agenda
+
+#+begin_src emacs-lisp
+(setq org-agenda-files '("~/.emacs.d/settings.d/"))
+#+end_src
+
+* Minor modes for Org
+
+#+begin_src emacs-lisp
+;; Bullets
+(package-install 'org-superstar)
+(add-hook 'org-mode-hook #'org-superstar-mode)
+(setq org-superstar-headline-bullets-list '("■" "■" "■" "■"))
+
+(package-install 'yasnippet)
+(add-hook 'org-mode-hook #'yas-minor-mode)
+#+end_src
+
+* TODO Presentations
+- Note taken on [2022-10-24 Mon 21:51] \\
+  Looks cool, gotta learn how to use this at some point
+
+#+begin_src emacs-lisp
+(package-install 'org-tree-slide)
+#+end_src

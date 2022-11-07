@@ -1,0 +1,17 @@
+*~
+.cache
+.dap-*
+.lsp*
+.org*
+eshell
+node_modules
+init_bash.sh
+elpa
+tramp
+url
+transient
+request
+recentf
+package.json
+package-lock.json
+settings.d/*.el

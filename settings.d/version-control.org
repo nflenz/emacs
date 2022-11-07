@@ -1,0 +1,13 @@
+* Disable VC
+
+VC slows down find-file over tramp, and I don't need it, so off it goes.
+
+#+begin_src emacs-lisp
+(setq vc-handled-backends nil)
+#+end_src
+
+* Magit
+
+#+begin_src emacs-lisp
+(package-install 'magit)
+#+end_src

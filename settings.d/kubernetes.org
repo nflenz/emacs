@@ -1,0 +1,25 @@
+* Tramp support
+
+#+begin_src emacs-lisp :tangle yes
+(require 'tramp)
+(package-install 'kubernetes-tramp)
+
+(push
+ (cons
+  "kubectl"
+  '((tramp-login-program "kubectl")
+    (tramp-login-args (("exec" "-it") ("-u" "%u") ("%h") ("--") ("sh")))
+    (tramp-remote-shell "/bin/sh")
+    (tramp-remote-shell-args ("-i" "-c"))))
+ tramp-methods)
+#+end_src
+
+* kubernetes porcelain
+
+Not sure how useful this is. It seems pretty slow, but I'll keep it for now.
+
+#+begin_src emacs-lisp :tangle yes
+(package-install 'kubernetes)
+#+end_src
+
+* TODO Kubernetes YAML support

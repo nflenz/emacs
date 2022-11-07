@@ -1,0 +1,161 @@
+* Rebindings
+
+** TODO Reassigned defaults go to C-z
+- Note taken on [2022-10-28 Fri 00:55] \\
+  Need to add support for specifying the keymap in
+  steal-default-keybind
+
+C-z will be the graveyard for stolen default keybindings. This will
+allow me to still use the defaults for those edge cases where I need
+them.
+
+For example, if I bind expand-region to "C-r" then isearch-backward
+will be reassigned to "C-z C-r".
+
+I'll just use M-x if I ever need suspend-frame.
+
+#+begin_src emacs-lisp :tangle yes
+  (global-unset-key (kbd "C-z"))
+
+  (defun steal-default-keybind (key symbol &optional keymap)
+    "Assign function to key and recreate the replaced function's
+  original binding under the C-z prefix"
+    (setq default-symbol (lookup-key (current-global-map) (kbd key)))
+    ; Only if the key is available under C-z
+    (if (lookup-key (current-global-map) (kbd (concat "C-z " key)))
+	(global-set-key (kbd (concat "C-z " key)) default-symbol))
+    (global-set-key (kbd key) symbol))
+#+end_src
+
+** Move actions to more convenient locations
+
+Just 'repeat for now
+
+#+begin_src emacs-lisp :tangle yes
+  (global-set-key (kbd "C-.") 'repeat)
+#+end_src
+
+** Bindings for useful crux functions
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'crux)
+  (steal-default-keybind "C-S-<backspace>" 'crux-kill-whole-line)
+  (steal-default-keybind "C-<backspace>" 'crux-kill-line-backwards)
+
+  (global-set-key (kbd "C-c y") 'crux-duplicate-current-line-or-region)
+
+  ;; Inspired by vi's bindings
+  (global-set-key (kbd "C-c J") 'crux-top-join-line)
+  (global-set-key (kbd "C-c o") 'crux-smart-open-line)
+  (global-set-key (kbd "C-c O") 'crux-smart-open-line-above)
+#+end_src
+
+* User-interface
+** The theme
+
+#+begin_src emacs-lisp :tangle yes
+(package-install 'monokai-theme)
+(load-theme 'monokai t)
+#+end_src
+
+** Remove unwanted mouse features
+
+#+begin_src emacs-lisp :tangle yes
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (menu-bar-mode -1)
+  (setq inhibit-startup-screen t)
+#+end_src
+
+** Always use y/n for confirmation
+
+#+begin_src emacs-lisp :tangle yes
+  (defalias 'yes-or-no-p 'y-or-n-p)
+#+end_src
+
+** Disable the system bell
+
+- Note taken on [2022-10-24 Mon 17:30] \\
+  It's completely useless and annoying. No thank you.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq ring-bell-function 'ignore)
+#+end_src
+
+** Which key
+#+begin_src emacs-lisp :tangle yes
+(package-install 'which-key)
+(which-key-mode)
+#+end_src
+
+** Multiple cursors
+
+#+begin_src emacs-lisp :tangle yes
+(package-install 'multiple-cursors)
+(require 'multiple-cursors)
+
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+#+end_src
+
+* Saving
+** Delete trailing whitespace on save
+
+#+begin_src emacs-lisp :tangle yes
+  (add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+end_src
+
+** Disable backups
+#+begin_src emacs-lisp :tangle yes
+(setq make-backup-files nil)
+#+end_src
+
+** Stop Emacs from editing init.el
+
+#+begin_src emacs-lisp :tangle yes
+(setq custom-file "/dev/null")
+#+end_src
+
+* Searching and selection
+** expand-region
+
+I'll be using swiper with C-s, so C-r isn't needed anymore
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'expand-region)
+  (steal-default-keybind "C-r" 'er/expand-region)
+#+end_src
+
+** Avy                                                                  :avy:
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'avy)
+  (setq avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o)) ; colemak
+
+  (global-set-key (kbd "M-g M-l") 'avy-goto-line)
+  ;(global-set-key (kbd "M-g M-c") 'avy-)
+#+end_src
+
+** Ivy/Counsel                                                          :ivy:
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'ivy)
+  (package-install 'counsel)
+  (ivy-mode)
+  (counsel-mode)
+#+end_src
+
+** Swiper                                                               :ivy:
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'swiper)
+  (steal-default-keybind "C-s" 'swiper)
+#+end_src
+
+** hippie-expand
+
+#+begin_src emacs-lisp :tangle yes
+  (steal-default-keybind "M-/" 'hippie-expand)
+#+end_src

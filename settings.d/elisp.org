@@ -1,0 +1,32 @@
+* Minor modes for editing emacs lisp
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'emacs-lisp-mode-hook #'show-paren-mode)
+
+(package-install 'paredit)
+(add-hook 'emacs-lisp-mode-hook #'paredit-mode)
+
+(package-install 'company)
+(add-hook 'emacs-lisp-mode-hook #'company-mode)
+
+(package-install 'aggressive-indent)
+(add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode)
+
+(package-install 'yasnippet)
+(add-hook 'emacs-lisp-mode-hook #'yas-minor-mode)
+
+#+end_src
+
+* Enable minor modes for eval-expression
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode)
+(add-hook 'eval-expression-minibuffer-setup-hook #'show-paren-mode)
+#+end_src
+
+* In-buffer elisp evaluation
+
+#+begin_src emacs-lisp :tangle yes
+(package-install 'crux)
+(global-set-key (kbd "C-c e") 'crux-eval-and-replace)
+#+end_src

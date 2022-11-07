@@ -1,0 +1,9 @@
+* Docker packages
+
+#+begin_src emacs-lisp
+  (package-install 'docker)
+  (package-install 'docker-compose-mode)
+  (package-install 'dockerfile-mode)
+#+end_src
+
+* TODO Lookup images and tags with ivy

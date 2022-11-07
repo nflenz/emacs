@@ -1,0 +1,34 @@
+* bashrc
+
+It's better to define bashrc here since I share the root user with other admins
+
+#+begin_src shell :header-args: :tangle yes :tangle "~/.emacs.d/init_bash.sh"
+ PS1='`hostname`:`pwd` \$ '
+#+end_src
+
+* Use Ivy for searching the command history
+
+#+begin_src emacs-lisp
+  (require 'shell)
+  (package-install 'counsel)
+  (define-key shell-mode-map (kbd "M-r") 'counsel-shell-history)
+#+end_src
+
+* TODO Function for remote connections
+
+#+begin_src emacs-lisp
+  (defun remote-shell (args)
+    "Open a shell with default-directory set to a remote path"
+    (interactive "P")
+    (let (default-directory "~")))
+#+end_src
+
+* Enable the "shell" language for Org Babel
+
+#+begin_src emacs-lisp
+(setq org-babel-sh-command "/bin/bash")
+
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((shell . t)))
+#+end_src
