@@ -1,7 +1,62 @@
-* Docker packages
+* Interacting with Docker
 
-#+begin_src emacs-lisp
+** Emacs packages that integrate with docker
+
+#+begin_src emacs-lisp :tangle yes
   (package-install 'docker)
+  (package-install 'docker-tramp)
+
+  (global-set-key (kbd "C-c d d") 'docker-containers)
+  (global-set-key (kbd "C-c d n") 'docker-network)
+  (global-set-key (kbd "C-c d i") 'docker-images)
+  (global-set-key (kbd "C-c d c") 'docker-compose)
+  (setq docker-compose-command "docker compose")
+#+end_src
+
+** Use ivy to set the DOCKER_HOST environment variable
+
+I connect to remote docker hosts over ssh frequently. This function
+makes switching between them much easier.
+
+~/.ssh/config is the source for this list
+
+#+begin_src emacs-lisp :tangle yes
+  (defun ivy-select-docker-host ()
+    "Update the DOCKER_HOST environment variable with ivy"
+    (interactive)
+    (let ((ssh-host-tuple nil)
+	  (docker-host-list '("file:///var/lib/docker.sock")))
+      (dolist (ssh-host-tuple (remove '(nil nil) (tramp-parse-sconfig "~/.ssh/config")) docker-host-list)
+	(add-to-list 'docker-host-list
+		     (concat "ssh://"
+			     (if tramp-default-user
+				 (concat tramp-default-user "@"))
+			     (car (cdr ssh-host-tuple)))))
+      (setenv "DOCKER_HOST" (ivy-read "DOCKER_HOST: " docker-host-list))))
+
+  (global-set-key (kbd "C-c d h") 'ivy-select-docker-host)
+#+end_src
+
+** Update docker-volume-dired to support remote volumes over ssh
+
+#+begin_src emacs-lisp :tangle yes
+  (setq lexical-binding t)
+
+  (aio-defun docker-volume-dired (name)
+    "Enter `dired' in the volume named NAME."
+    (interactive (list (docker-volume-read-name)))
+    (let ((path (shell-command-to-string (concat "echo -n `docker inspect -f '{{ .Mountpoint }}' " name "`"))))
+      (if (string-match "^ssh://" (getenv "DOCKER_HOST"))
+	  (dired (format "/ssh:%s|sudo::%s" (car (cdr (split-string (getenv "DOCKER_HOST") "//"))) path))
+	(dired (format "/sudo::%s" path)))
+      (message path)))
+
+  (global-set-key (kbd "C-c d v") 'docker-volume-dired)
+#+end_src
+
+* Docker file formats
+
+#+begin_src emacs-lisp :tangle yes
   (package-install 'docker-compose-mode)
   (package-install 'dockerfile-mode)
 #+end_src
