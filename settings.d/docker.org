@@ -42,7 +42,8 @@ makes switching between them much easier.
 #+begin_src emacs-lisp :tangle yes
   (setq lexical-binding t)
 
-  (aio-defun docker-volume-dired (name)
+  (require 'docker)
+  (defun docker-volume-dired (name)
     "Enter `dired' in the volume named NAME."
     (interactive (list (docker-volume-read-name)))
     (let ((path (shell-command-to-string (concat "echo -n `docker inspect -f '{{ .Mountpoint }}' " name "`"))))
