@@ -55,6 +55,18 @@ makes switching between them much easier.
   (global-set-key (kbd "C-c d v") 'docker-volume-dired)
 #+end_src
 
+** Open a shell on DOCKER_HOST
+
+#+begin_src emacs-lisp :tangle yes
+  (defun docker-host-shell (args)
+    "Open a shell on $DOCKER_HOST"
+    (interactive "P")
+    (let ((default-directory (concat "/ssh:" (car (cdr (split-string (getenv "DOCKER_HOST") "ssh://"))) "|sudo::/var/lib/docker/volumes")))
+      (shell)))
+
+  (global-set-key (kbd "C-c d s") 'docker-host-shell)
+#+end_src
+
 * Docker file formats
 
 #+begin_src emacs-lisp :tangle yes
