@@ -7,6 +7,8 @@ eshell
 node_modules
 init_bash.sh
 elpa
+eln-cache
+*sqlite
 tramp
 url
 transient
