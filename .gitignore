@@ -9,6 +9,7 @@ init_bash.sh
 elpa
 eln-cache
 *sqlite
+games
 tramp
 url
 transient
