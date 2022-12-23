@@ -58,6 +58,13 @@ Just 'repeat for now
 (load-theme 'monokai t)
 #+end_src
 
+** Powerline
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'powerline)
+  (powerline-default-theme)
+#+end_src
+
 ** Remove unwanted mouse features
 
 #+begin_src emacs-lisp :tangle yes
