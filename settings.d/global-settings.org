@@ -116,7 +116,8 @@ Just 'repeat for now
 
 ** Disable backups
 #+begin_src emacs-lisp :tangle yes
-(setq make-backup-files nil)
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
 #+end_src
 
 ** Stop Emacs from editing init.el
