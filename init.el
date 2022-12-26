@@ -11,6 +11,7 @@
 (org-babel-load-file "~/.emacs.d/settings.d/elisp.org")
 (org-babel-load-file "~/.emacs.d/settings.d/shell.org")
 (org-babel-load-file "~/.emacs.d/settings.d/kubernetes.org")
+(org-babel-load-file "~/.emacs.d/settings.d/ansible.org")
 
 ;; Start in the scratch buffer
 (switch-to-buffer "*scratch*")

@@ -1,0 +1,31 @@
+* Packages                                                              :lsp:
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'ansible)
+  (package-install 'ansible-doc)
+  (package-install 'ansible-vault)
+  (package-install 'company-ansible)
+  (package-install 'poly-ansible)
+  (package-install 'lsp-mode)
+  (package-install 'yaml-pro)
+
+  (add-hook 'ansible-hook #'lsp-deferred)
+  (add-hook 'ansible-hook #'ansible-doc-mode)
+  (add-hook 'ansible-hook #'yaml-pro-mode)
+#+end_src
+
+* Code completion
+
+Writing ansible playbooks is agonizing, so you better believe I'm
+enabling completion as often as possible.
+
+#+begin_src emacs-lisp :tangle yes
+  (defun newline-and-complete ()
+    (interactive)
+    (newline)
+    (indent-for-tab-command)
+    (completion-at-point))
+
+  (define-key ansible-key-map (kbd "M-<return>") #'newline-and-complete)
+  (define-key ansible-key-map (kbd "C-M-i") #'completion-at-point)
+#+end_src
