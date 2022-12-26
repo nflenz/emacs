@@ -1,0 +1,11 @@
+* Use human-readable sizes
+
+#+begin_src emacs-lisp :tangle yes
+(setq dired-listing-switches "-alh")
+#+end_src
+
+* Enable dired-find-alternate-file
+
+#+begin_src emacs-lisp :tangle yes
+(put 'dired-find-alternate-file 'disabled nil)
+#+end_src
