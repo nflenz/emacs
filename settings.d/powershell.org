@@ -1,0 +1,9 @@
+* Packages
+
+#+begin_src emacs-lisp :tangle yes
+  (package-install 'powershell)
+
+  (add-hook 'powershell-mode-hook #'lsp-deferred)
+  (add-hook 'powershell-mode-hook #'aggressive-indent-mode)
+  (add-hook 'powershell-mode-hook #'yasnippet-minor-mode)
+#+end_src
