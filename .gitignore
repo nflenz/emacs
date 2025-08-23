@@ -1,0 +1,15 @@
+elpaca
+url
+tramp
+eshell
+eln-cache
+projects
+result
+transient
+auto-save-list
+.cache
+session.*
+.lsp-session*
+projectile-bookmarks*
+elpa
+PowerShellEditorServices.json
