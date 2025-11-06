@@ -71,7 +71,7 @@
   (evil-define-key 'normal vertico-map "u" #'vertico-previous)
   (evil-define-key 'normal vertico-map "e" #'vertico-next)
   (evil-define-key 'normal vertico-map (kbd "RET") #'vertico-exit)
-  (evil-define-key 'normal vertico-map (kbd "<tab>") #'vertico-insert))
+  (evil-define-key '(normal insert) vertico-map (kbd "<tab>") #'vertico-insert))
 
 (use-package corfu
   :demand t
@@ -100,7 +100,9 @@
 		 (yas-expand)
 	       (error nil)))
 	(if (not (condition-case err
-		     (yas-next-field)
+		     (progn
+		       (yas-next-field)
+		       t)
 		   (error nil)))
 	    (if (not (condition-case err
 			 (corfu-complete)
@@ -167,8 +169,10 @@
   :config
   (evil-set-initial-state #'elfeed-search-mode 'emacs))
 
+(use-package kele)
+
 ;; Terminal emulation inside emacs
-(use-package vterm)
+;; (use-package vterm)
 
 ;; Automatic indentation for source code
 (use-package aggressive-indent
@@ -191,6 +195,8 @@
   (evil-define-key '(normal insert) global-map (kbd "M-p") #'magit-file-dispatch)
   (evil-define-key '(normal insert) global-map (kbd "M-f") #'magit-dispatch)
   (evil-define-key '(normal insert) global-map (kbd "M-w") #'projectile-vc)
+  (with-eval-after-load 'magit-mode
+    (add-hook 'after-save-hook 'magit-after-save-refresh-status t))
   (evil-set-initial-state #'magit-status-mode 'emacs))
 
 ;; Language server protocol
@@ -203,7 +209,8 @@
   ((lsp-keymap-prefix "M-p")
    (lsp-enable-suggest-server-download nil)
    (gc-cons-threshold 100000000)
-   (read-process-output-max (* 1024 1024)))
+   (read-process-output-max (* 1024 1024))
+   (lsp-semantic-tokens-enable nil))
   :hook
   (lsp-mode . lsp-ui-mode)
   :config
@@ -258,15 +265,15 @@
   :hook
   (powershell-mode . lsp-deferred)
   :config
+  (add-to-list 'lsp-language-id-configuration
+               '(powershell-mode . "pwsh"))
+
   (lsp-register-client
    (make-lsp-client
     :new-connection (lsp-stdio-connection '("powershell-editor-services -Stdio"))
-    :major-modes '(powershell-mode)
+    :activation-fn (lsp-activate-on "pwsh")
     :server-id 'pwsh-lsp
-    :priority 0))
-  ;; (repl-driven-development [<f13>] "pwsh -NoProfile -NoLogo" :prompt "PS*>")
-  ;; (evil-define-key '(insert normal motion) powershell-mode-map (kbd "C-r") #'pwsh-eval)
-  )
+    :priority 0)))
 
 (use-package racket-mode
   :hook
@@ -351,7 +358,10 @@
   :hook
   (markdown-mode . lsp-deferred))
 
-(use-package ansible)
+(use-package ansible
+  :after yasnippet
+  :config
+  (add-hook 'ansible-mode-hook (lambda () (yas-activate-extra-mode 'ansible-mode))))
 
 (use-package terraform-mode
   :hook
@@ -374,4 +384,37 @@
   (repl-driven-development [<f13>] "irb --inf-ruby-mode --echo-on-assignment" :prompt "irb(main):.*>")
   (evil-define-key '(insert normal motion) ruby-mode-map (kbd "C-r") #'irb-eval))
 
-(switch-to-buffer "*scratch*")
+(use-package shell
+  :ensure nil
+  :hook
+  (shell-mode . evil-insert-state)
+  (shell-mode . electric-pair-mode)
+  ;; (shell-mode . ansi-color-for-comint-mode-on)
+  ;; (shell-mode . comint-strip-ctrl-m)
+  :config
+  (evil-define-key '(normal insert motion) shell-mode-map (kbd "C-z") #'self-insert-command)
+  (evil-define-key '(normal insert motion) shell-mode-map (kbd "C-d") #'self-insert-command)
+  (evil-define-key '(normal insert motion) shell-mode-map (kbd "<ret>") #'comint-send-input)
+  (evil-define-key '(normal insert motion) shell-mode-map (kbd "C-r") #'consult-history))
+
+(use-package fish-mode
+  :hook
+  (fish-mode . lsp-deferred)
+  (fish-mode . aggressive-indent-mode)
+  (fish-mode . electric-pair-mode)
+  :config
+  (add-to-list 'lsp-language-id-configuration
+               '(fish-mode . "fish"))
+
+  (lsp-register-client
+   (make-lsp-client
+     :new-connection (lsp-stdio-connection '("fish-lsp" "start"))
+     :activation-fn (lsp-activate-on "fish")
+     :server-id 'fish-lsp)))
+
+(use-package nushell-mode
+  :hook
+  (nushell-mode . lsp-deferred)
+  (nushell-mode . aggressive-indent-mode))
+
+(evil-set-initial-state #'elpaca-manager-mode 'emacs)
