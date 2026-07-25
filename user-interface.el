@@ -29,7 +29,9 @@
 (setq ring-bell-function 'ignore)
 
 ;; This theme seems to look the best on the terminal
-(load-theme 'wombat)
+(use-package ef-themes
+  :init
+  (load-theme 'ef-bio))
 
 ;; Show relative line numbers
 (setq display-line-numbers-type 'relative)
@@ -140,3 +142,10 @@
 (use-package yasnippet-capf
   :demand t
   :after cape)
+
+(use-package beacon
+  :config
+  (beacon-mode))
+
+(use-package awk-ts-mode
+  :ensure nil)

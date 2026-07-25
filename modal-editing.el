@@ -336,8 +336,7 @@
   ;; (define-key ryo-modal-mode-map (kbd "SPC") xah-fly-leader-key-map)
   (ryo-modal-keys
    ("x" xah-cut-line-or-region)
-   ("c" xah-copy-line-or-region)
-   ("v" xah-paste-previou)))
+   ("c" xah-copy-line-or-region)))
 
 (use-package expand-region
   :ensure t

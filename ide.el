@@ -1,39 +1,44 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Improve treesitter's syntax highlighting
 (setq treesit-font-lock-level 4)
 
-(use-package magit
-  :custom
-  ; Stop majit from splitting the window
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
-  :config
-  (ryo-modal-keys
-   ("SPC s" magit-file-dispatch)
-   ("SPC t" magit-dispatch)))
-
-(use-package diff-hl
+(use-package yasnippet
   :init
-;; Show uncommited changes in the buffer
-  (global-diff-hl-mode)
-  :config
-  (ryo-modal-keys
-   (" n" diff-hl-previous-hunk)
-   ("SPC r i" diff-hl-next-hunk)
-   ("SPC r r" diff-hl-revert-hunk)
-   ("SPC r s" diff-hl-stage-dwim)))
-
-;; Limit the vc backend to just git because VC slows down tramp
-(setq vc-handled-backends '(Git))
+  (yas-global-mode))
 
 (use-package smerge-mode
   :ensure nil
   :bind
-  ("C-x C-v p" . smerge-prev)
-  :config
-  (ryo-modal-keys
-   ("C-x C-v p" smerge-prev)
-   ("C-x C-v n" smerge-next)
-   ("C-x C-v u" smerge-keep-upper)
-   ("C-x C-v l" smerge-keep-lower)))
+  (:map smerge-mode-map
+	("M-n" . smerge-next)
+	("M-p" . smerge-prev)
+	("M-u" . smerge-keep-upper)
+	("M-l" . smerge-keep-lower)))
+
+(use-package yasnippet-snippets)
+
+(use-package magit
+  :custom
+  ;; Stop magit from splitting the window
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+(use-package diff-hl
+  :custom
+  (diff-hl-show-staged-changes nil)
+  :init
+  ;; Show uncommited changes in the buffer
+  (global-diff-hl-mode)
+  :bind
+  ("M-n" . diff-hl-next-hunk)
+  ("M-p" . diff-hl-previous-hunk)
+  ("M-s" . diff-hl-stage-dwim)
+  ("M-k" . diff-hl-revert-hunk))
+
+;; Limit the vc backend to just git because VC slows down tramp
+(setq vc-handled-backends '(Git))
+
+(use-package reformatter)
 
 ;; Automatically use treesitter modes when available
 (use-package treesit-auto
@@ -57,11 +62,29 @@
   :ensure nil)
 
 (use-package flycheck)
-(use-package consult-flycheck)
+(use-package consult-flycheck
+  :bind
+  ("C-c e" . consult-flycheck))
+
+(use-package sideline
+  :hook
+  (flycheck-mode . sideline-mode)
+  :init
+  (setq sideline-backends-right '(sideline-flycheck)))
+
+(use-package sideline-flycheck
+  :hook
+  (flycheck-mode . sideline-flycheck-setup))
+
 (use-package flycheck-eglot
   :after (flycheck eglot)
   :config
   (global-flycheck-eglot-mode 1))
+
+(use-package dockerfile-ts-mode
+  :ensure nil
+  :hook
+  (dockerfile-ts-mode . eglot-ensure))
 
 (use-package markdown-ts-mode
   :ensure t
@@ -74,9 +97,13 @@
 
 (use-package powershell
   :after eglot
-  :hook s
+  :hook
   (powershell-mode . electric-pair-local-mode)
-  (powershell-mode . aggressive-indent-mode))
+  (powershell-mode . eglot-ensure)
+  (powershell-mode . aggressive-indent-mode)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(powershell-mode . ("powershell-editor-services" "-Stdio"))))
 
 (use-package nix-ts-mode
   :after eglot
@@ -84,10 +111,11 @@
   :hook
   (nix-ts-mode . electric-pair-local-mode)
   (nix-ts-mode . aggressive-indent-mode)
-  (eglot-ensure))
+  (nix-ts-mode . eglot-ensure))
 
 (use-package yaml-pro
   :defer t)
+
 (use-package yaml-ts-mode
   :after eglot
   :ensure nil
@@ -101,7 +129,12 @@
   :hook
   (python-ts-mode . electric-pair-local-mode))
 
-(use-package systemd)
+(use-package systemd
+  :hook
+  (systemd-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(systemd-mode . ("systemd-language-server"))))
 
 (use-package nushell-ts-mode
   :hook
@@ -113,3 +146,100 @@
   :hook
   (bash-ts-mode . aggressive-indent-mode)
   (bash-ts-mode . eglot-ensure))
+
+(use-package just-ts-mode
+  :hook
+  (just-ts-mode . eglot-ensure)
+  (just-ts-mode . aggressive-indent-mode)
+  :config
+  (add-to-list 'eglot-server-programs
+               '(just-ts-mode . ("just-lsp"))))
+
+(use-package terraform-mode
+  :hook
+  (terraform-mode . eglot-ensure)
+  (terraform-mode . aggressive-indent-mode))
+
+(use-package awk-ts-mode
+  :ensure nil
+  :hook
+  (awk-ts-mode . eglot-ensure)
+  (awk-ts-mode . aggressive-indent-mode)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(awk-ts-mode . ("awk-language-server"))))
+
+(use-package lua-ts-mode
+  :hook
+  (lua-ts-mode . eglot-ensure)
+  (lua-ts-mode . aggressive-indent-mode))
+
+(use-package js-ts-mode
+  :ensure nil
+  :hook
+  (js-ts-mode . eglot-ensure)
+  (js-ts-mode . aggressive-indent-mode))
+
+(use-package typescript-ts-mode
+  :ensure nil
+  :hook
+  (typescript-ts-mode . eglot-ensure)
+  (typescript-ts-mode . aggressive-indent-mode))
+
+(use-package java-ts-mode
+  :ensure nil
+  :hook
+  (java-ts-mode . eglot-ensure)
+  (java-ts-mode . aggressive-indent-mode))
+
+(use-package rust-ts-mode
+  :ensure nil
+  :hook
+  (rust-ts-mode . eglot-ensure)
+  (rust-ts-mdoe . aggressive-indent-mode))
+
+(use-package ruby-ts-mode
+  :ensure nil
+  :hook
+  (ruby-ts-mode . eglot-ensure)
+  (ruby-ts-mode . aggressive-indent-mode))
+
+(use-package elixir-ts-mode
+  :hook
+  (elixir-ts-mode . eglot-ensure)
+  (elixir-ts-mode . aggressive-indent-mode)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(elixir-ts-mode . ("elixir-ls"))))
+
+(use-package jq-ts-mode
+  :hook
+  (jq-ts-mode . eglot-ensure)
+  (jq-ts-mode . aggressive-indent-mode))
+
+(use-package perl-ts-mode
+  :hook
+  (perl-mode . eglot-ensure)
+  (perl-mode . aggressive-indent-mode)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(perl-mode . ("perlnavigator"))))
+
+(use-package zig-ts-mode
+  :hook
+  (zig-ts-mode . eglot-ensure)
+  (zig-ts-mode . aggressive-indent-mode))
+
+(use-package haskell-ts-mode
+  :hook
+  (haskell-ts-mode . eglot-ensure)
+  (haskell-ts-mode . aggressive-indent-mode))
+
+(use-package go-ts-mode
+  :hook
+  (go-ts-mode . eglot-ensure)
+  (go-ts-mode . aggressive-indent-mode)
+  (go-ts-mode . go-format-on-save-mode)
+  :config
+  (reformatter-define go-format
+    :program "gofmt"))
