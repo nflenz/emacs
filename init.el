@@ -56,3 +56,10 @@
 (put 'downcase-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
+
+(use-package surround
+  :bind
+  ("C-c a" . surround-insert)
+  ("C-c c" . surround-change)
+  ("C-c d" . surround-delete)
+  ("C-c k" . surround-kill-outer))
