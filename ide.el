@@ -127,7 +127,10 @@
 (use-package python-ts-mode
   :ensure nil
   :hook
-  (python-ts-mode . electric-pair-local-mode))
+  (python-ts-mode . electric-pair-local-mode)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(python-ts-mode . ("basedpyright"))))
 
 (use-package systemd
   :hook
