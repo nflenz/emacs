@@ -236,6 +236,7 @@
   (haskell-ts-mode . aggressive-indent-mode))
 
 (use-package go-ts-mode
+  :ensure nil
   :hook
   (go-ts-mode . eglot-ensure)
   (go-ts-mode . aggressive-indent-mode)
