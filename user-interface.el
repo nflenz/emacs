@@ -136,7 +136,9 @@
 
 ;; Extra completion functions
 (use-package cape
-  :defer nil)
+  :defer nil
+  :bind
+  ("M-/" . cape-dabbrev))
 
 ;; Show snippets in corfu
 (use-package yasnippet-capf
