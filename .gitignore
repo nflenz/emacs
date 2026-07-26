@@ -2,8 +2,10 @@
 /eln-cache/
 /elpa/
 elpaca
-tree-sitter
+places.eld
 projects.eld
+recentf.eld
 temp
 tramp
 transient
+tree-sitter
