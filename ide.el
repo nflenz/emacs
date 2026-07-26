@@ -243,3 +243,11 @@
   :config
   (reformatter-define go-format
     :program "gofmt"))
+
+(use-package sql-mode
+  :ensure nil
+  :hook
+  (sql-mode . eglot-ensure)
+  :config
+  (add-to-list 'eglot-server-programs
+	       '(sql-mode . '("sqls"))))
