@@ -36,7 +36,9 @@
   :config
   (setq prefix-help-command #'embark-prefix-help-command)
   (vertico-multiform-mode)
-  (add-to-list 'vertico-multiform-categories '(embark-keybinding grid)))
+  (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
+  :bind
+  ("M-j" . embark-act))
 
 (use-package embark-consult)
 (use-package multiple-cursors)
