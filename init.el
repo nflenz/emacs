@@ -11,6 +11,12 @@
       '(("melpa" . 10)
         ("gnu"   . 5)))
 
+;; Remember last location in files
+(save-place-mode 1)
+
+;; Automatically insert matching braces
+(electric-pair-mode 1)
+
 ;; Stop emacs from modifying init.el
 (load (setq custom-file (concat user-emacs-directory "custom-set-variables.el")))
 
