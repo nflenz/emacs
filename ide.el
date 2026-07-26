@@ -48,10 +48,10 @@
   (treesit-auto-add-to-auto-mode-alist 'all)
   (global-treesit-auto-mode))
 
-(use-package paredit
-  :hook
-  (emacs-lisp-mode . paredit-mode)
-  (lisp-interaction-mode . paredit-mode))
+;; (use-package paredit
+;;   :hook
+;;   (emacs-lisp-mode . paredit-mode)
+;;   (lisp-interaction-mode . paredit-mode))
 
 (use-package aggressive-indent
   :hook
