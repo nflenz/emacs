@@ -147,5 +147,4 @@
   :config
   (beacon-mode))
 
-(use-package awk-ts-mode
-  :ensure nil)
+(use-package eldoc-box)
