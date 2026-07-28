@@ -5,6 +5,9 @@
 (setq use-package-always-ensure t)
 (load (concat user-emacs-directory "elpaca.el"))
 
+(if (file-exists-p "~/.proxy.el")
+    (load "~/proxy.el"))
+
 ;; ;; Enable melpa
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
 ;; (setq package-archive-priorities
