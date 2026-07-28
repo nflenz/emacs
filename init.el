@@ -2,14 +2,14 @@
 
 ;; If nix is installed, we're assuming our packages were installed
 ;; with home-manager
-(setq use-package-always-ensure
-      (if (file-directory-p "/nix") nil t))
+(setq use-package-always-ensure t)
+(load (concat user-emacs-directory "elpaca.el"))
 
-;; Enable melpa
-(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-(setq package-archive-priorities
-      '(("melpa" . 10)
-        ("gnu"   . 5)))
+;; ;; Enable melpa
+;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+;; (setq package-archive-priorities
+;;       '(("melpa" . 10)
+;;         ("gnu"   . 5)))
 
 ;; Remember last location in files
 (save-place-mode 1)

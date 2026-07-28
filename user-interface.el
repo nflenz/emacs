@@ -117,8 +117,21 @@
   ;; 					     (interactive "P")
   ;; 					     (corfu-quit)
   ;; 					     (previous-line args)))
+
   
-  )
+  (defun corfu-move-to-minibuffer ()
+    (interactive)
+    (pcase completion-in-region--data
+      (`(,beg ,end ,table ,pred ,extras)
+       (let ((completion-extra-properties extras)
+             completion-cycle-threshold completion-cycling)
+	 (consult-completion-in-region beg end table pred)))))
+
+  (with-eval-after-load 'corfu
+    ;; Bind the command to a key of your choice (e.g., M-m)
+    (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
+    ;; Prevent Corfu from automatically closing when invoking this command
+    (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)))
 
 ;; Display completion candidates in order
 (use-package prescient

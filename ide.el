@@ -173,6 +173,7 @@
 	       '(awk-ts-mode . ("awk-language-server"))))
 
 (use-package lua-ts-mode
+  :ensure nil
   :hook
   (lua-ts-mode . eglot-ensure)
   (lua-ts-mode . aggressive-indent-mode))
@@ -221,6 +222,7 @@
   (jq-ts-mode . aggressive-indent-mode))
 
 (use-package perl-ts-mode
+  :ensure nil
   :hook
   (perl-mode . eglot-ensure)
   (perl-mode . aggressive-indent-mode)

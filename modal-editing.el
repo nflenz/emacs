@@ -267,14 +267,14 @@
       (kill-line args))
     (modal/stop))
 
-  ;; (defun modal/delete (args)
-  ;;   "If region is active then kill-region. If region isn't active then kill-whole-line"
-  ;;   (interactive "P")
-  ;;   (if (use-region-p)
-  ;; 	(progn
-  ;; 	  (call-interactively #'kill-region)
-  ;; 	  (xah-shrink-whitespaces))
-  ;;     (kill-whole-line args)))
+  (defun modal/delete (args)
+    "If region is active then kill-region. If region isn't active then kill-whole-line"
+    (interactive "P")
+    (if (use-region-p)
+	(progn
+	  (call-interactively #'kill-region)
+	  (xah-shrink-whitespaces))
+      (kill-whole-line args)))
 
   ;; (defun modal/delete-paragraph (args)
   ;;   "Delete the current paragraph"
@@ -315,12 +315,8 @@
 
   (ryo-modal-keys
    ("s" modal/change)
-   ;; ("x" modal/delete)
-   ;; ("X" modal/delete-paragraph)
-   ("f" modal/comment)
-   ;; ("F" modal/comment-paragraph)
-   ("RET" modal/open-line-below)
-   ("SPC RET" modal/open-line-above)))
+   ("x" modal/delete)
+   ("f" modal/comment)))
 
 ;; Just needed for some functions that I like
 (use-package xah-fly-keys
@@ -335,7 +331,7 @@
   (xah-fly-keys-set-layout "colemak")
   ;; (define-key ryo-modal-mode-map (kbd "SPC") xah-fly-leader-key-map)
   (ryo-modal-keys
-   ("x" xah-cut-line-or-region)
+   ("w" xah-shrink-whitespaces)
    ("c" xah-copy-line-or-region)))
 
 (use-package expand-region
@@ -344,6 +340,5 @@
   (ryo-modal-keys
    ("a" er/expand-region)
    ("m" er/mark-defun)
-   ("," er/mark-text-paragraph)
-   ("." er/mark-inside-pairs)
-   ("/" er/mark-outside-pairs)))
+   ("," er/mark-inside-pairs)
+   ("." er/mark-outside-pairs)))
