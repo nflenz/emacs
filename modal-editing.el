@@ -14,16 +14,6 @@
    ("." ryo-modal-repeat)
    ("z" undo))
 
-  (defun modal/start ()
-    "Change the cursor to a block and start ryo-modal-mode"
-    (interactive)
-    (send-string-to-terminal "\e[2 q")
-    (ryo-modal-mode 1))
-  
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-  ;;                     Entering and exiting ryo-modal-mode                    ;
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
   (ryo-modal-keys
    ;; First argument to ryo-modal-keys may be a list of keywords.
    ;; These keywords will be applied to all keybindings.
@@ -38,7 +28,16 @@
    ("7" "M-7")
    ("8" "M-8")
    ("9" "M-9"))
-  ;; (modal/start)
+  
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;;                     Entering and exiting ryo-modal-mode                    ;
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+  (defun modal/start ()
+    "Change the cursor to a block and start ryo-modal-mode"
+    (interactive)
+    (send-string-to-terminal "\e[2 q")
+    (ryo-modal-mode 1))
 
   (defun modal/stop ()
     "Change the curor to a vertical bar and stop ryo-modal-mode"
@@ -52,20 +51,24 @@
     (deactivate-mark)
     (modal/stop))
 
-  (global-set-key (kbd "C-t") #'modal/start)
-  
-  (defun MODAL/forward-char (args)
-    "docstring"
-    (interactive "P")
-    (deactivate-mark)
-    (forward-char args))
+  (defun modal/sync-cursor (&optional _)
+    "Sync the terminal cursor shape with the current modal state."
+    ;; The `unless` check prevents errors if you ever run Emacs in a GUI
+    (unless (display-graphic-p) 
+      (if ryo-modal-mode
+          (send-string-to-terminal "\e[2 q")
+	(send-string-to-terminal "\e[6 q"))))
+
+  (add-hook 'ryo-modal-mode-hook #'modal/sync-cursor)
+  (add-hook 'window-selection-change-functions #'modal/sync-cursor)
+  (add-hook 'window-buffer-change-functions #'modal/sync-cursor)
+
+  (ryo-modal-keys
+   ("t" modal/insert))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;;                                 Characters                                 ;
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-  (ryo-modal-keys
-   ("t" modal/insert))
   
   (defun modal/forward-char (args)
     "docstring"
