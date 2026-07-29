@@ -87,8 +87,7 @@
   (dockerfile-ts-mode . eglot-ensure))
 
 (use-package markdown-ts-mode
-  :ensure t
-  :after eglot
+  :ensure nil
   :hook
   (markdown-ts-mode . eglot-ensure)
   :config
@@ -96,7 +95,6 @@
                '(markdown-ts-mode . ("marksman" "server"))))
 
 (use-package powershell
-  :after eglot
   :hook
   (powershell-mode . electric-pair-local-mode)
   (powershell-mode . eglot-ensure)
@@ -106,7 +104,6 @@
 	       '(powershell-mode . ("powershell-editor-services" "-Stdio"))))
 
 (use-package nix-ts-mode
-  :after eglot
   :defer t
   :hook
   (nix-ts-mode . electric-pair-local-mode)
@@ -117,9 +114,9 @@
   :defer t)
 
 (use-package yaml-ts-mode
-  :after eglot
   :ensure nil
   :hook
+  (yaml-ts-mode . eglot-ensure)
   (yaml-ts-mode . yaml-pro-mode)
   (yaml-ts-mode . electric-pair-local-mode)
   (yaml-ts-mode . yaml-pro-mode))
