@@ -319,7 +319,32 @@
   (ryo-modal-keys
    ("s" modal/change)
    ("x" modal/delete)
-   ("f" modal/comment)))
+   ("f" modal/comment))
+
+
+  (defun modal/mark-inner-quotes-or-pairs ()
+    "Try `er/mark-inside-quotes`, and if it fails to change the region, run `er/mark-inside-pairs`."
+    (interactive)
+    (let ((p (point))
+          (m (mark t)))
+      (ignore-errors (er/mark-inside-quotes))
+      (when (and (eq p (point))
+		 (eq m (mark t)))
+	(ignore-errors (er/mark-inside-pairs)))))
+
+  (defun modal/mark-outside-quotes-or-pairs ()
+    "Try `er/mark-outer-quotes`, and if it fails to change the region, run `er/mark-outer-pairs`."
+    (interactive)
+    (let ((p (point))
+          (m (mark t)))
+      (ignore-errors (er/mark-outside-quotes))
+      (when (and (eq p (point))
+		 (eq m (mark t)))
+	(ignore-errors (er/mark-outside-pairs)))))
+
+  (ryo-modal-keys
+   ("," modal/mark-inner-quotes-or-pairs)
+   ("." modal/mark-outside-quotes-or-pairs)))
 
 ;; Just needed for some functions that I like
 (use-package xah-fly-keys
@@ -339,9 +364,9 @@
 
 (use-package expand-region
   :ensure t
+  :bind
+  ("M-h" . er/mark-text-paragraph)
   :config
   (ryo-modal-keys
    ("a" er/expand-region)
-   ("m" er/mark-defun)
-   ("," er/mark-inside-pairs)
-   ("." er/mark-outside-pairs)))
+   ("/" er/mark-defun)))
