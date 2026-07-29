@@ -52,6 +52,8 @@
 
 ;; Functions for vertico
 (use-package consult
+  :bind
+  ("C-c s" . consult-line)
   :demand t)
 
 ;; Extra information for completion candidates
