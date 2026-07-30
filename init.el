@@ -26,6 +26,7 @@
 (load (concat user-emacs-directory "user-interface.el"))
 (load (concat user-emacs-directory "modal-editing.el"))
 (load (concat user-emacs-directory "ide.el"))
+(load (concat user-emacs-directory "lsp-booster.el"))
 (load (concat user-emacs-directory "temp-fixes.el"))
 
 (use-package eat)
