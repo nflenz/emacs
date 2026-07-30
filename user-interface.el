@@ -74,7 +74,7 @@
   (corfu-auto t)
   (corfu-auto-delay 0.1)
   (corfu-popupinfo-delay 0)
-  (corfu-count 30)
+  (corfu-count 10)
   (corfu-auto-prefix 0)
   :bind
   ("C-<tab>" . #'completion-at-point)
