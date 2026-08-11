@@ -24,7 +24,8 @@
 (load (setq custom-file (concat user-emacs-directory "custom-set-variables.el")))
 
 (load (concat user-emacs-directory "user-interface.el"))
-(load (concat user-emacs-directory "modal-editing.el"))
+(load (concat user-emacs-directory "editing.el"))
+;;(load (concat user-emacs-directory "modal-editing.el"))
 (load (concat user-emacs-directory "ide.el"))
 (load (concat user-emacs-directory "lsp-booster.el"))
 (load (concat user-emacs-directory "temp-fixes.el"))
@@ -42,7 +43,7 @@
   (vertico-multiform-mode)
   (add-to-list 'vertico-multiform-categories '(embark-keybinding grid))
   :bind
-  ("M-j" . embark-act))
+  ("M-e" . embark-act))
 
 (use-package embark-consult)
 (use-package multiple-cursors)
@@ -56,14 +57,7 @@
   :config
   (ctrlf-mode +1))
 
-(put 'upcase-region 'disabled nil)
-(put 'downcase-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
-(use-package surround
-  :bind
-  ("C-c a" . surround-insert)
-  ("C-c c" . surround-change)
-  ("C-c d" . surround-delete)
-  ("C-c k" . surround-kill-outer))
+

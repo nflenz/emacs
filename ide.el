@@ -1,5 +1,7 @@
 ;; -*- lexical-binding: t; -*-
 
+(global-set-key (kbd "C-x C-r") #'vc-restore)
+
 ;; Improve treesitter's syntax highlighting
 (setq treesit-font-lock-level 4)
 
@@ -28,12 +30,7 @@
   (diff-hl-show-staged-changes nil)
   :init
   ;; Show uncommited changes in the buffer
-  (global-diff-hl-mode)
-  :bind
-  ("M-n" . diff-hl-next-hunk)
-  ("M-p" . diff-hl-previous-hunk)
-  ("M-s" . diff-hl-stage-dwim)
-  ("M-k" . diff-hl-revert-hunk))
+  (global-diff-hl-mode))
 
 ;; Limit the vc backend to just git because VC slows down tramp
 (setq vc-handled-backends '(Git))
@@ -125,9 +122,13 @@
   :ensure nil
   :hook
   (python-ts-mode . electric-pair-local-mode)
+  (python-ts-mode . eglot-ensure)
   :config
+  ;; Remove rass from the configuration
+  (setf (alist-get '(python-mode python-ts-mode) eglot-server-programs nil nil #'equal)
+        '("basedpyright-langserver" "--stdio"))
   (add-to-list 'eglot-server-programs
-	       '(python-ts-mode . ("basedpyright"))))
+	       '(python-ts-mode . ("basedpyright-langserver" "--stdio"))))
 
 (use-package systemd
   :hook
