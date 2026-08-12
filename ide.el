@@ -108,15 +108,27 @@
   (nix-ts-mode . eglot-ensure))
 
 (use-package yaml-pro
-  :defer t)
+  :bind
+  (:map yaml-pro-ts-mode-map
+	("C-M-p" . yaml-pro-ts-prev-subtree)
+	("C-M-n" . yaml-pro-ts-next-subtree)
+	("C-M-k" . yaml-pro-ts-kill-subtree)
+	("C-M-u" . yaml-pro-ts-up-level)
+	("C-M-d" . yaml-pro-ts-down-level)
+	("C-M-a" . yaml-pro-ts-first-sibling)
+	("C-M-e" . yaml-pro-ts-last-sibling)
+	("C-M-t" . yaml-pro-ts-move-subtree-down)
+	("C-M-T" . yaml-pro-ts-move-subtree-up)
+	("C-c <" . yaml-pro-ts-unindent-subtree)
+	("C-c >" . yaml-pro-ts-indent-subtree)
+	("C-c C-s" . yaml-pro-jump)))
 
 (use-package yaml-ts-mode
   :ensure nil
   :hook
   (yaml-ts-mode . eglot-ensure)
-  (yaml-ts-mode . yaml-pro-mode)
-  (yaml-ts-mode . electric-pair-local-mode)
-  (yaml-ts-mode . yaml-pro-mode))
+  (yaml-ts-mode . yaml-pro-ts-mode)
+  (yaml-ts-mode . electric-pair-local-mode))
 
 (use-package python-ts-mode
   :ensure nil
