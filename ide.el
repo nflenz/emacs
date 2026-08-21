@@ -84,6 +84,7 @@
   (dockerfile-ts-mode . eglot-ensure))
 
 (use-package markdown-ts-mode
+  :defer nil
   :ensure nil
   :hook
   (markdown-ts-mode . eglot-ensure)
