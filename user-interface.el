@@ -131,6 +131,8 @@
 ;; Show snippets in corfu
 (use-package yasnippet-capf
   :demand t
+  :bind
+  ("C-c c y" . #'yasnippet-capf)
   :after cape)
 
 (use-package beacon
