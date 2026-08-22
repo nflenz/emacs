@@ -103,15 +103,30 @@ position"
 ;;                                Highlighting                                ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package expand-region
-  :bind
-  ("M-o" . er/mark-outside-pairs)
-  ("M-i" . er/mark-inside-pairs)
-  ("M-r" . er/expand-region)
-  :custom
-  (er/try-expand-list
-   '(er/mark-inside-quotes
-     er/mark-outside-quotes)))
+(use-package expand-region)
+
+(defun my/mark-inner-quotes-or-pairs ()
+  "Try `er/mark-inside-quotes`, and if it fails to change the region, run `er/mark-inside-pairs`."
+  (interactive)
+  (let ((p (point))
+        (m (mark t)))
+    (ignore-errors (er/mark-inside-quotes))
+    (when (and (eq p (point))
+	       (eq m (mark t)))
+      (ignore-errors (er/mark-inside-pairs)))))
+
+(defun my/mark-outside-quotes-or-pairs ()
+  "Try `er/mark-outer-quotes`, and if it fails to change the region, run `er/mark-outer-pairs`."
+  (interactive)
+  (let ((p (point))
+        (m (mark t)))
+    (ignore-errors (er/mark-outside-quotes))
+    (when (and (eq p (point))
+	       (eq m (mark t)))
+      (ignore-errors (er/mark-outside-pairs)))))
+
+(global-set-key (kbd "M-o") #'my/mark-outside-quotes-or-pairs)
+(global-set-key (kbd "M-i") #'my/mark-inner-quotes-or-pairs)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                    Pairs                                   ;
