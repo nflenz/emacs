@@ -69,7 +69,7 @@
   (kill-sexp (- args)))
 
 (global-set-key (kbd "C-c l") #'my/duplicate-line)
-(global-set-key (kbd "C-x DEL") #'my/kill-line-backwards)
+(global-set-key (kbd "M-k") #'my/kill-line-backwards)
 (global-set-key (kbd "C-c DEL") #'my/kill-sexp-backwards)
 (global-set-key (kbd "C-x C-d") #'kill-whole-line)
 
@@ -97,6 +97,7 @@ position"
 
 (global-set-key (kbd "C-j") #'my/join-line-backward)
 (global-set-key (kbd "M-j") #'my/join-line-forward)
+(define-key lisp-interaction-mode-map (kbd "C-j") nil)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                Highlighting                                ;
@@ -169,3 +170,17 @@ position"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (global-set-key (kbd "M-y") #'consult-yank-pop)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;                                 Whitespace                                 ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun my/fix-whitespace-or-kill-region (args)
+  "Run kill-region if transient mark, else fix whitespace"
+  (interactive "p")
+  (if (region-active-p)
+      (call-interactively #'kill-region)
+    (delete-blank-lines)
+    (just-one-space)))
+
+(global-set-key (kbd "C-w") #'my/fix-whitespace-or-kill-region)

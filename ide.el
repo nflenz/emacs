@@ -50,6 +50,17 @@
 ;;   (emacs-lisp-mode . paredit-mode)
 ;;   (lisp-interaction-mode . paredit-mode))
 
+
+(add-hook 'lisp-interaction-mode-hook
+	  (lambda ()
+	    (setq-local completion-at-point-functions
+			(list (cape-capf-super #'yasnippet-capf #'elisp-completion-at-point)))))
+
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    (setq-local completion-at-point-functions
+			(list (cape-capf-super #'yasnippet-capf #'elisp-completion-at-point)))))
+
 (use-package aggressive-indent
   :hook
   (emacs-lisp-mode . aggressive-indent-mode)

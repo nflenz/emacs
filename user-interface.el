@@ -69,6 +69,10 @@
   (completion-category-overrides '((file (styles partial-completion)))))
 
 (use-package corfu
+  :init  
+  (global-corfu-mode 1)
+  (corfu-popupinfo-mode 1)
+
   :custom
   (corfu-on-exact-match nil)
   (corfu-auto t)
@@ -76,64 +80,33 @@
   (corfu-popupinfo-delay 0)
   (corfu-count 10)
   (corfu-auto-prefix 0)
+
   :bind
-  ("C-<tab>" . #'completion-at-point)
-  :init  
-  (global-corfu-mode 1)
-  (corfu-popupinfo-mode 1)
-  (keymap-unset corfu-map "RET")
+  (:map corfu-map
+	("<tab>" . #'corfu-complete)
+	("M-N" . #'corfu-next)
+	("M-P" . #'corfu-previous)
+	("C-n" . #'my/corfu-quit-and-execute)
+	("C-p" . #'my/corfu-quit-and-execute)
+	("RET" . #'my/corfu-quit-and-execute)
+	("M-m" . #'my/corfu-move-to-minibuffer))
 
-  ;; Make corfu friendly with yas
-  (defun my/tab (args)
-    "Overload that tab key"
-    (interactive "P")
-    (if (not (condition-case err
-		 (corfu-complete)
-               (error nil)))
-	(if (not (condition-case err
-		     (yas-expand)
-		   (error nil)))
-            (if (not (condition-case err
-			 (progn
-			   (yas-next-field)
-			   t)
-		       (error nil)))
-		(indent-for-tab-command)))))
+  :config  
+  (defun my/corfu-quit-and-execute (args)
+    "Stop corfu and execute the pressed chord"
+    (interactive "p")
+    (corfu-quit)
+    (execute-kbd-macro (this-command-keys)))
 
-  ;; (evil-define-key '(normal insert) corfu-map (kbd "<tab>") #'my/tab)
-  ;; (evil-define-key '(normal insert) global-map (kbd "<tab>") #'my/tab)
-
-  ;; (evil-define-key '(normal) corfu-map (kbd "<tab>") #'my/tab)
-  ;; (evil-define-key '(insert) global-map (kbd "<tab>") #'my/tab)
-  ;; (evil-define-key '(normal) corfu-map (kbd "M-e") #'corfu-next)
-  ;; (evil-define-key '(normal) corfu-map (kbd "M-u") #'corfu-previous)
-  ;; (evil-define-key '(insert) global-map (kbd "M-e") #'corfu-next)
-  ;; (evil-define-key '(insert) global-map (kbd "M-u") #'corfu-previous)
-
-  ;; ;; Normal movement should just quit corfu
-  ;; (evil-define-key '(normal) corfu-map "e" (lambda (args)
-  ;; 					     (interactive "P")
-  ;; 					     (corfu-quit)
-  ;; 					     (next-line args)))
-  ;; (evil-define-key '(normal) corfu-map "u" (lambda (args)
-  ;; 					     (interactive "P")
-  ;; 					     (corfu-quit)
-  ;; 					     (previous-line args)))
-
-  
-  (defun corfu-move-to-minibuffer ()
+  (defun my/corfu-move-to-minibuffer ()
     (interactive)
     (pcase completion-in-region--data
       (`(,beg ,end ,table ,pred ,extras)
        (let ((completion-extra-properties extras)
              completion-cycle-threshold completion-cycling)
 	 (consult-completion-in-region beg end table pred)))))
-
-  (with-eval-after-load 'corfu
-    ;; Bind the command to a key of your choice (e.g., M-m)
-    (keymap-set corfu-map "M-m" #'corfu-move-to-minibuffer)
-    ;; Prevent Corfu from automatically closing when invoking this command
-    (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer)))
+  
+  (add-to-list 'corfu-continue-commands #'corfu-move-to-minibuffer))
 
 ;; Display completion candidates in order
 (use-package prescient
