@@ -63,4 +63,23 @@
 (put 'narrow-to-page 'disabled nil)
 (put 'narrow-to-region 'disabled nil)
 
+(use-package fish-completion
+  :hook
+  (ghostel-line-mode . #'fish-completion-mode))
 
+(use-package ghostel
+  :bind
+  ("C-z" . #'ghostel)
+  :init
+  ;; Set ghostel as my default buffer
+  ;; Also launch ghostel if it isn't running
+  (setq initial-buffer-choice
+	(lambda ()
+          ;; Start ghostel if the buffer doesn't already exist
+          (unless (get-buffer "*ghostel*")
+            (ghostel))
+          ;; Return the ghostel buffer to display it
+          (get-buffer "*ghostel*")))
+  ;; (with-eval-after-load 'ghostel-mode
+  ;;   (setq-local completion-at-point-functions '(cape-file)))
+  )
