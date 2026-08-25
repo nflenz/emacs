@@ -177,8 +177,8 @@ position"
 
 (use-package crux
   :bind
-  ("C-c o" . crux-smart-open-line)
-  ("C-c O" . crux-smart-open-line-above))
+  ("C-o" . crux-smart-open-line)
+  ("C-c o" . crux-smart-open-line-above))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Pasting                                  ;
