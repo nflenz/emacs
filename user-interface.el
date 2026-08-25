@@ -36,6 +36,9 @@
 ;; Transparency
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 
+;; Font size
+(set-face-attribute 'default nil :height 140)
+
 ;; Better help commands
 (use-package helpful
   :bind
