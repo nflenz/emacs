@@ -33,6 +33,9 @@
   :init
   (load-theme 'ef-bio))
 
+;; Transparency
+(add-to-list 'default-frame-alist '(alpha-background . 90))
+
 ;; Better help commands
 (use-package helpful
   :bind
