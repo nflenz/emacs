@@ -33,6 +33,9 @@
   :init
   (load-theme 'ef-bio))
 
+;; Kill buffer without asking which one
+(global-set-key (kbd "C-x k ") #'kill-current-buffer)
+
 ;; Transparency
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 
