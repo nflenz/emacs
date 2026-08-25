@@ -48,7 +48,10 @@
 (use-package embark-consult)
 (use-package multiple-cursors)
 (use-package visual-regexp)
-(use-package projectile)
+
+(use-package projectile
+  :bind
+  ("C-x p" . 'projectile-command-map))
 
 ;; (use-package electric-operator)
 ;; (prettify-symbols-mode)
