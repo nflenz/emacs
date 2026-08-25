@@ -33,10 +33,6 @@
   :init
   (load-theme 'ef-bio))
 
-;; Show relative line numbers
-(setq display-line-numbers-type 'relative)
-(global-display-line-numbers-mode 1)
-
 ;; Better help commands
 (use-package helpful
   :bind
