@@ -36,6 +36,9 @@
 ;; Kill buffer without asking which one
 (global-set-key (kbd "C-x k ") #'kill-current-buffer)
 
+;; Switch to the previous buffer
+(global-set-key (kbd "C-x C-b") #'crux-switch-to-previous-buffer)
+
 ;; Transparency
 (add-to-list 'default-frame-alist '(alpha-background . 90))
 
