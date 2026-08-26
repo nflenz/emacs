@@ -119,21 +119,21 @@
   (nix-ts-mode . aggressive-indent-mode)
   (nix-ts-mode . eglot-ensure))
 
-(use-package yaml-pro
-  :bind
-  (:map yaml-pro-ts-mode-map
-	("C-M-p" . yaml-pro-ts-prev-subtree)
-	("C-M-n" . yaml-pro-ts-next-subtree)
-	("C-M-k" . yaml-pro-ts-kill-subtree)
-	("C-M-u" . yaml-pro-ts-up-level)
-	("C-M-d" . yaml-pro-ts-down-level)
-	("C-M-a" . yaml-pro-ts-first-sibling)
-	("C-M-e" . yaml-pro-ts-last-sibling)
-	("C-M-t" . yaml-pro-ts-move-subtree-down)
-	("C-M-T" . yaml-pro-ts-move-subtree-up)
-	("C-c <" . yaml-pro-ts-unindent-subtree)
-	("C-c >" . yaml-pro-ts-indent-subtree)
-	("C-c C-s" . yaml-pro-jump)))
+;; (use-package yaml-pro
+;;   :bind
+;;   (:map yaml-pro-ts-mode-map
+;; 	("C-M-p" . yaml-pro-ts-prev-subtree)
+;; 	("C-M-n" . yaml-pro-ts-next-subtree)
+;; 	("C-M-k" . yaml-pro-ts-kill-subtree)
+;; 	("C-M-u" . yaml-pro-ts-up-level)
+;; 	("C-M-d" . yaml-pro-ts-down-level)
+;; 	("C-M-a" . yaml-pro-ts-first-sibling)
+;; 	("C-M-e" . yaml-pro-ts-last-sibling)
+;; 	("C-M-t" . yaml-pro-ts-move-subtree-down)
+;; 	("C-M-T" . yaml-pro-ts-move-subtree-up)
+;; 	("C-c <" . yaml-pro-ts-unindent-subtree)
+;; 	("C-c >" . yaml-pro-ts-indent-subtree)
+;; 	("C-c C-s" . yaml-pro-jump)))
 
 (use-package yaml-ts-mode
   :ensure nil
