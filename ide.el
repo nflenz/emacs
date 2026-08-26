@@ -139,7 +139,7 @@
   :ensure nil
   :hook
   (yaml-ts-mode . eglot-ensure)
-  (yaml-ts-mode . yaml-pro-ts-mode)
+  ;; (yaml-ts-mode . yaml-pro-ts-mode)
   (yaml-ts-mode . electric-pair-local-mode))
 
 (use-package python-ts-mode
