@@ -1,12 +1,16 @@
 ;; -*- lexical-binding: t; -*-
 
+(global-set-key (kbd "C-.") #'kmacro-start-macro)
+(global-set-key (kbd "C-,") #'kmacro-end-macro)
+(global-set-key (kbd "M-'") #'repeat)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                  Movement                                  ;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (use-package avy
   :custom
-  (avy-keys '(?a ?r ?s ?t ?n ?e ?i ?o))
+  (avy-keys '(?t ?n ?s ?e ?r ?i ?a ?o))
   :bind
   ("M-a" . avy-goto-char-timer))
 
@@ -24,12 +28,13 @@
   (let ((start (point)))
     (back-to-indentation)
     (when (= start (point))
-      (avy-goto-line))))
+      (avy-goto-line)
+      (back-to-indentation))))
 
-(global-set-key (kbd "M-p") #'backward-paragraph)
-(global-set-key (kbd "M-n") #'forward-paragraph)
 (global-set-key (kbd "C-a") #'my/beginning-of-line)
 (global-set-key (kbd "C-e") #'my/end-of-line)
+(global-set-key (kbd "M-p") #'backward-paragraph)
+(global-set-key (kbd "M-n") #'forward-paragraph)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                               Copying/Killing                              ;
@@ -38,18 +43,6 @@
 ;; Automatically delete highlighted text when I start typing
 (delete-selection-mode 1)
 
-(defun my/duplicate-line (args)
-  "Insert a copy of the current line"
-  (interactive "p")
-  (let* ((kill-ring kill-ring)
-	 (position (point)))    
-    (beginning-of-line)
-    (kill-line 1)
-    (yank)
-    (yank)
-    (goto-char position)
-    (next-line)))
-
 (defun my/kill-whole-line (args)
   "Kill the current line while saving cursor position"
   (interactive "P")
@@ -57,21 +50,16 @@
     (kill-whole-line args)
     (goto-char position)))
 
-(defun my/kill-line-backwards (args)
-  "Kill text from point to indentation"
-  (interactive "p")
-  (kill-line (+ 1 (- args)))
-  (indent-for-tab-command))
-
 (defun my/kill-sexp-backwards (args)
   "kill-sexp in the opposite direction"
   (interactive "p")
   (kill-sexp (- args)))
 
-(global-set-key (kbd "C-c l") #'my/duplicate-line)
-(global-set-key (kbd "M-k") #'my/kill-line-backwards)
+(global-set-key (kbd "C-c l") #'crux-duplicate-current-line-or-region)
+(global-set-key (kbd "C-<backspace>") #'crux-kill-line-backwards)
+(global-set-key (kbd "M-k") #'my/kill-whole-line)
 (global-set-key (kbd "C-c DEL") #'my/kill-sexp-backwards)
-(global-set-key (kbd "C-x C-d") #'kill-whole-line)
+(global-set-key (kbd "C-M-z") #'zap-up-to-char)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Joining                                  ;
@@ -178,7 +166,7 @@ position"
 (use-package crux
   :bind
   ("C-o" . crux-smart-open-line)
-  ("C-c o" . crux-smart-open-line-above))
+  ("C-M-o" . crux-smart-open-line-above))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;                                   Pasting                                  ;

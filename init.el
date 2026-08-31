@@ -28,6 +28,7 @@
 ;;(load (concat user-emacs-directory "modal-editing.el"))
 (load (concat user-emacs-directory "ide.el"))
 (load (concat user-emacs-directory "lsp-booster.el"))
+(load (concat user-emacs-directory "terminal.el"))
 (load (concat user-emacs-directory "temp-fixes.el"))
 
 (use-package eat)
@@ -50,6 +51,8 @@
 (use-package visual-regexp)
 
 (use-package projectile
+  :custom
+  (projectile-switch-project-action #'projectile-vc)
   :bind
   ("C-x p" . 'projectile-command-map))
 
@@ -66,20 +69,3 @@
 (use-package fish-completion
   :hook
   (ghostel-line-mode . #'fish-completion-mode))
-
-(use-package ghostel
-  :bind
-  ("C-z" . #'ghostel)
-  :init
-  ;; Set ghostel as my default buffer
-  ;; Also launch ghostel if it isn't running
-  (setq initial-buffer-choice
-	(lambda ()
-          ;; Start ghostel if the buffer doesn't already exist
-          (unless (get-buffer "*ghostel*")
-            (ghostel))
-          ;; Return the ghostel buffer to display it
-          (get-buffer "*ghostel*")))
-  ;; (with-eval-after-load 'ghostel-mode
-  ;;   (setq-local completion-at-point-functions '(cape-file)))
-  )
