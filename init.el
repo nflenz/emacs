@@ -52,9 +52,10 @@
 
 (use-package projectile
   :custom
-  (projectile-switch-project-action #'projectile-vc)
+  (projectile-switch-project-action #'projectile-run-ghostel)
   :bind
-  ("C-x p" . 'projectile-command-map))
+  ("C-x p" . 'projectile-command-map)
+  ("C-z" . 'projectile-run-ghostel))
 
 ;; (use-package electric-operator)
 ;; (prettify-symbols-mode)
