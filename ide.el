@@ -117,7 +117,11 @@
   :hook
   (nix-ts-mode . electric-pair-local-mode)
   (nix-ts-mode . aggressive-indent-mode)
-  (nix-ts-mode . eglot-ensure))
+  (nix-ts-mode . eglot-ensure)
+  (nix-ts-mode . nix-format-on-save-mode)
+  :config
+  (reformatter-define nix-format
+    :program "nixfmt"))
 
 ;; (use-package yaml-pro
 ;;   :bind
@@ -183,7 +187,12 @@
 (use-package terraform-mode
   :hook
   (terraform-mode . eglot-ensure)
-  (terraform-mode . aggressive-indent-mode))
+  (terraform-mode . aggressive-indent-mode)
+  (terraform-mode . terraform-format-on-save)
+  :config
+  (reformatter-define terraform-format
+    :program "terraform"
+    :args '("fmt" "-")))
 
 (use-package awk-ts-mode
   :ensure nil
