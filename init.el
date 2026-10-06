@@ -55,6 +55,8 @@
   (projectile-switch-project-action #'projectile-run-ghostel)
   :bind
   ("C-x p" . 'projectile-command-map)
+  ("C-x b" . 'projectile-switch-to-buffer)
+  ("C-x B" . 'switch-to-buffer)
   ("C-z" . 'projectile-run-ghostel))
 
 ;; (use-package electric-operator)
