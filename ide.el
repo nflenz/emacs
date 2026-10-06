@@ -188,7 +188,7 @@
   :hook
   (terraform-mode . eglot-ensure)
   (terraform-mode . aggressive-indent-mode)
-  (terraform-mode . terraform-format-on-save)
+  (terraform-mode . terraform-format-on-save-mode)
   :config
   (reformatter-define terraform-format
     :program "terraform"
