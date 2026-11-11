@@ -145,6 +145,7 @@
 
 (use-package beacon
   :config
+  (add-to-list 'beacon-dont-blink-major-modes 'ghostel-mode)
   (beacon-mode))
 
 (use-package eldoc-box)
