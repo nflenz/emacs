@@ -20,8 +20,8 @@
           (get-buffer "*ghostel*"))))
 
 (defun my/switch-to-ghostel-buffer ()
-  "Run `consult-buffer` and pre-fill the minibuffer with `*ghostel `."
+  "Run `project-switch-to-buffer` and pre-fill the minibuffer with `*ghostel `."
   (interactive)
   (minibuffer-with-setup-hook
       (lambda () (insert "*ghostel "))
-    (call-interactively #'consult-buffer)))
+    (call-interactively #'projectile-switch-to-buffer)))
