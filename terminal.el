@@ -2,11 +2,12 @@
 
 (use-package ghostel
   :bind
-  (("C-z" . #'projectile-run-ghostel)
+  (("C-z" . #'ghostel)
+   ("C-c z" . #'my/switch-to-ghostel-buffer)
    (:map ghostel-semi-char-mode-map
-	 ("C-z" . #'my/switch-to-ghostel-buffer))
+	 ("C-z" . #'ghostel))
    (:map ghostel-line-mode-map
-	 ("C-z" . #'my/switch-to-ghostel-buffer)))
+	 ("C-z" . #'ghostel)))
   
   :init
   ;; Set ghostel as my default buffer
@@ -17,7 +18,12 @@
           (unless (get-buffer "*ghostel*")
             (ghostel))
           ;; Return the ghostel buffer to display it
-          (get-buffer "*ghostel*"))))
+          (get-buffer "*ghostel*")))
+
+  ;; Put the current directory in the buffer name
+  (setq ghostel-buffer-name-function
+	(lambda (_title)
+          (format "*ghostel: %s*" (abbreviate-file-name default-directory)))))
 
 (defun my/switch-to-ghostel-buffer ()
   "Run `project-switch-to-buffer` and pre-fill the minibuffer with `*ghostel `."
